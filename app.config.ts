@@ -128,7 +128,6 @@ export default ({ config }: { config: ExpoConfig }): ExpoConfig => ({
 
         androidSpeechServicePackages: [
           "com.google.android.googlequicksearchbox",
-          "com.google.android.googlequicksearchbox",
           "com.google.android.tts",
         ],
       },
