@@ -3,29 +3,56 @@ import type { ExpoConfig } from "expo/config";
 
 export default ({ config }: { config: ExpoConfig }): ExpoConfig => ({
   ...config,
-  name: "maid",
-  slug: "maid",
+
+  // ============================================================
+  // IDENTITÉ DE L'APPLICATION
+  // ============================================================
+
+  name: "Michael AI",
+  slug: "michael-ai",
+
   orientation: "portrait",
+
+  // Nous garderons l'icône actuelle temporairement.
+  // Nous la remplacerons ensuite par l'icône de Michael.
   icon: "./assets/images/icon.png",
-  scheme: "maid",
+
+  // Schéma utilisé pour les liens internes de l'application.
+  scheme: "michael-ai",
+
   userInterfaceStyle: "automatic",
+
+  // ============================================================
+  // iOS
+  // ============================================================
 
   ios: {
     supportsTablet: true,
-    bundleIdentifier: "com.danemadsen.maid",
+    bundleIdentifier: "com.michaelai.app",
   },
+
+  // ============================================================
+  // ANDROID
+  // ============================================================
 
   android: {
     adaptiveIcon: {
       foregroundImage: "./assets/images/adaptive-icon.png",
       backgroundColor: "#000000",
     },
-    package: "com.danemadsen.maid",
+
+    // Identifiant unique de Michael AI
+    package: "com.michaelai.app",
+
     permissions: [
       "android.permission.RECORD_AUDIO",
       "android.permission.MODIFY_AUDIO_SETTINGS",
     ],
   },
+
+  // ============================================================
+  // WEB
+  // ============================================================
 
   web: {
     bundler: "metro",
@@ -33,10 +60,15 @@ export default ({ config }: { config: ExpoConfig }): ExpoConfig => ({
     favicon: "./assets/images/favicon.png",
   },
 
+  // ============================================================
+  // PLUGINS
+  // ============================================================
+
   plugins: [
     "expo-asset",
     "expo-router",
     "expo-sqlite",
+
     [
       "expo-splash-screen",
       {
@@ -46,45 +78,72 @@ export default ({ config }: { config: ExpoConfig }): ExpoConfig => ({
         backgroundColor: "#000000",
       },
     ],
+
     "expo-audio",
     "expo-font",
     "expo-web-browser",
     "expo-secure-store",
     "expo-localization",
+
     [
       "expo-build-properties",
       {
         android: {
-          // You don't have ProGuard enabled right now, so this is optional.
-          // Keep it commented until/if you turn minify on.
-          // extraProguardRules: `
-          // # llama.rn
-          // -keep class com.rnllama.** { *; }
-          // `,
+          // ProGuard désactivé pour le moment.
+          // Nous ne touchons pas à cette partie.
         },
       },
     ],
+
+    // ==========================================================
+    // MOTEUR LOCAL LLAMA.CPP
+    // ==========================================================
+
     [
       "llama.rn",
       {
         enableEntitlements: true,
         entitlementsProfile: "production",
+
+        // Michael utilise C++20
         forceCxx20: true,
-        enableOpenCLAndHexagon: true
+
+        // Conservé pour le moteur llama.cpp.
+        enableOpenCLAndHexagon: true,
       },
     ],
+
+    // ==========================================================
+    // RECONNAISSANCE VOCALE
+    // ==========================================================
+
     [
       "expo-speech-recognition",
       {
-        microphonePermission: "Allow $(PRODUCT_NAME) to use the microphone.",
-        speechRecognitionPermission: "Allow $(PRODUCT_NAME) to use speech recognition.",
-        androidSpeechServicePackages: ["com.google.android.googlequicksearchbox", "com.google.android.tts"]
-      }
+        microphonePermission:
+          "Allow $(PRODUCT_NAME) to use the microphone.",
+
+        speechRecognitionPermission:
+          "Allow $(PRODUCT_NAME) to use speech recognition.",
+
+        androidSpeechServicePackages: [
+          "com.google.android.googlequicksearchbox",
+          "com.google.android.googlequicksearchbox",
+          "com.google.android.tts",
+        ],
+      },
     ],
-    // Keeps the release signing, ABI splits and version code logic reproducible
-    // across `expo prebuild --clean`.
+
+    // ==========================================================
+    // CONFIGURATION ANDROID DE MICHAEL AI
+    // ==========================================================
+
     "./plugins/maid-android",
   ],
+
+  // ============================================================
+  // EXPERIMENTS EXPO
+  // ============================================================
 
   experiments: {
     typedRoutes: true,
