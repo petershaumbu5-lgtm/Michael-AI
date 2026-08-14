@@ -70,7 +70,37 @@ async function cleanupLocalModelFiles(modelFiles: Record<string, string>) {
 };
 
 function parseMessages(messages: Array<MessageNode>): Array<RNLlamaOAICompatibleMessage> {
-  return messages.map((message) => {
+  const conversation = messages.filter(
+    (message) => message.role !== "system"
+  );
+
+  return [
+    {
+      role: "system",
+      content: MICHAEL_SYSTEM_PROMPT,
+    } as RNLlamaOAICompatibleMessage,
+
+    ...conversation.map((message) => {
+      const images: Array<string> | undefined =
+        (message.metadata as any)?.images;
+
+      if (images && images.length > 0) {
+        return {
+          role: message.role,
+          content: [
+            { type: "text", text: message.content as string },
+            ...images.map((uri) => ({
+              type: "image_url" as const,
+              image_url: { url: uri },
+            })),
+          ],
+        } as RNLlamaOAICompatibleMessage;
+      }
+
+      return message as unknown as RNLlamaOAICompatibleMessage;
+    }),
+  ];
+}
     const images: Array<string> | undefined = (message.metadata as any)?.images;
 
     if (images && images.length > 0) {
